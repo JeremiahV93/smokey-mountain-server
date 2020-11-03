@@ -49,3 +49,26 @@ def delete_user(id):
         DELETE FROM users
         WHERE id = ?
         """, (id, ))
+
+def update_user(id, new_user):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        UPDATE users
+            SET
+                first_name = ?,
+                last_name = ?,
+                email = ?,
+                display_name = ?,
+                date = ?
+        WHERE id = ?
+        """, (new_user['first_name'], new_user['last_name'],
+              new_user['email'], new_user['display_name'],
+              new_user['date'], id, ))
+        rows_affected = db_cursor.rowcount
+    if rows_affected == 0:
+        # Forces 404 response by main module
+        return False
+    else:
+        # Forces 204 response by main module
+        return True

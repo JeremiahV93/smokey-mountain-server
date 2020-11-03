@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
-from users import get_single_user, create_user, delete_user
+from users import get_single_user, create_user, delete_user, update_user
 
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -72,7 +72,21 @@ class HandleRequests(BaseHTTPRequestHandler):
         if resource == 'users':
                 delete_user(id)
         self.wfile.write("".encode())
-        
+
+    def do_PUT(self):
+        content_len = int(self.headers.get('content-length', 0))
+        post_body = self.rfile.read(content_len)
+        post_body = json.loads(post_body)
+        # Parse the URL
+        (resource, id) = self.parse_url(self.path)
+        success = False
+        if resource == "users":
+            success = update_user(id, post_body)
+        if success:
+            self._set_headers(204)
+        else:
+            self._set_headers(404)
+        self.wfile.write("".encode())        
 
 def main():
     host = ''
