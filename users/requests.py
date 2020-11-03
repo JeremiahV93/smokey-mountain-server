@@ -41,3 +41,11 @@ def create_user(new_user):
         id = db_cursor.lastrowid
         new_user['id'] = id
     return json.dumps(new_user)
+
+def delete_user(id):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        DELETE FROM users
+        WHERE id = ?
+        """, (id, ))

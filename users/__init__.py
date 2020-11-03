@@ -1,1 +1,1 @@
-from .requests import get_single_user, create_user
+from .requests import get_single_user, create_user, delete_user
