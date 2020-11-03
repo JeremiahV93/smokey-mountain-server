@@ -1,6 +1,8 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
+from users import get_single_user
+
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
         path_params = path.split("/")
@@ -13,7 +15,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             key = pair[0]  
             value = pair[1]
 
-            return(resource, key, value)
+            return( resource, key, value )
 
         else:
             id = None
@@ -25,7 +27,7 @@ class HandleRequests(BaseHTTPRequestHandler):
             except ValueError:
                 pass
 
-            return(resource, id)
+            return( resource, id )
 
     def _set_headers(self, status):
         self.send_response(status)
@@ -41,13 +43,15 @@ class HandleRequests(BaseHTTPRequestHandler):
         parsed = self.parse_url(self.path)
 
         if len(parsed) == 2:
-            (resource, id) = parsed
+            ( resource, id ) = parsed
 
             if resource == "users":
                 if id is not None:
                     response = f"{get_single_user(id)}"
                 else:
-                    response = None
+                    response = ""
+
+        self.wfile.write(response.encode())
 
 def main():
     host = ''

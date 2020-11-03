@@ -8,6 +8,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+rare.db
+rare.sql
+
 # C extensions
 *.so
 

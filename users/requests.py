@@ -3,7 +3,7 @@ from models.user import User
 import sqlite3
 import json
 
-def get_single_user():
+def get_single_user(id):
     with sqlite3.connect("./rare.db") as conn:
 
         conn.row_factory = sqlite3.Row
@@ -15,7 +15,7 @@ def get_single_user():
             u.first_name,
             u.last_name,
             u.email,
-            u.diplay_name,
+            u.display_name,
             u.date
         FROM users u
         WHERE u.id = ?
