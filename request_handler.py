@@ -2,8 +2,8 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
 from users import get_single_user, create_user, delete_user, update_user
+from categories import get_category_by_id, get_all_categories, delete_category
 from articles import get_single_article, create_article
-from categories import get_category_by_id, get_all_categories
 
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -88,6 +88,9 @@ class HandleRequests(BaseHTTPRequestHandler):
         (resource, id) = self.parse_url(self.path)
         if resource == 'users':
                 delete_user(id)
+        elif resource == 'categories':
+            delete_category(id)
+                
         self.wfile.write("".encode())
 
     def do_PUT(self):
