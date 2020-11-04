@@ -27,3 +27,11 @@ def get_single_article(id):
         article = Article(data['id'],data['title'],data['content'], data['date'], data['user_id'], data['category_id'])
 
         return json.dumps(article.__dict__)
+
+def delete_article(id):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        DELETE FROM articles
+        WHERE id = ?
+        """, (id, ))
