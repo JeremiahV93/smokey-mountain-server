@@ -3,9 +3,9 @@ import json
 
 from users import get_single_user, create_user, delete_user, update_user
 from categories import get_category_by_id, get_all_categories
-from articles import get_single_article, create_article, delete_article
+from articles import get_single_article, create_article, delete_article, update_article
 from categories import get_category_by_id, get_all_categories, delete_category
-from articles import get_single_article, create_article
+
 
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -105,6 +105,9 @@ class HandleRequests(BaseHTTPRequestHandler):
         success = False
         if resource == "users":
             success = update_user(id, post_body)
+        elif resource == "articles":
+            success = update_article(id, post_body)
+        
         if success:
             self._set_headers(204)
         else:
