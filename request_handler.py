@@ -2,8 +2,9 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
 from users import get_single_user, create_user, delete_user, update_user
+from articles import get_single_article, create_article
 from categories import get_category_by_id, get_all_categories
-from articles import get_single_article
+
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
         path_params = path.split("/")
@@ -71,11 +72,16 @@ class HandleRequests(BaseHTTPRequestHandler):
 
         post_body = json.loads(post_body)
         (resource, id) = self.parse_url(self.path)
-        new_user = None
+      
 
         if resource == "users":
+            new_user = None
             new_user = create_user(post_body)
-        self.wfile.write(f"{new_user}".encode())
+            self.wfile.write(f"{new_user}".encode())
+        elif resource == "articles":
+            new_article = None
+            new_article = create_article(post_body)
+            self.wfile.write(f"{new_article}".encode())
 
     def do_DELETE(self):
         self._set_headers(204)
