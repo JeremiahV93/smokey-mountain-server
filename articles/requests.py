@@ -28,6 +28,14 @@ def get_single_article(id):
 
         return json.dumps(article.__dict__)
 
+def delete_article(id):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        DELETE FROM articles
+        WHERE id = ?
+        """, (id, ))
+        
 def create_article(new_article):
     with sqlite3.connect('./rare.db') as conn:
         db_cursor = conn.cursor()
