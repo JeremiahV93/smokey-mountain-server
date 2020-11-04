@@ -3,7 +3,7 @@ import json
 
 from users import get_single_user, create_user, delete_user, update_user
 from articles import get_single_article, create_article, delete_article, update_article
-from categories import get_category_by_id, get_all_categories, delete_category, update_category
+from categories import get_category_by_id, get_all_categories, delete_category, update_category, create_category
 
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -83,6 +83,10 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_article = None
             new_article = create_article(post_body)
             self.wfile.write(f"{new_article}".encode())
+        elif resource == "categories":
+            new_article = None
+            new_article = create_category(post_body)
+            self.wfile.write(f"{new_article}".encode())    
 
     def do_DELETE(self):
         self._set_headers(204)
