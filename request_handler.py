@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
 from users import get_single_user, create_user, delete_user, update_user
-
+from articles import get_single_article
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
         path_params = path.split("/")
@@ -50,6 +50,11 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_user(id)}"
                 else:
                     response = ""
+            elif resource == "articles":
+                if id is not None:
+                    response = f"{get_single_article(id)}" 
+                else:
+                    response = ""           
 
         self.wfile.write(response.encode())
 
