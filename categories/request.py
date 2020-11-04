@@ -43,3 +43,13 @@ def get_category_by_id(id):
         category = Category(data['id'], data['title'])
 
         return json.dumps(category.__dict__)
+
+
+def delete_category(id):
+    with sqlite3.connect('./rare.db') as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        DELETE FROM categories
+        WHERE id = ?
+        """, (id, ))
