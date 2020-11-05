@@ -44,7 +44,6 @@ def get_category_by_id(id):
 
         return json.dumps(category.__dict__)
 
-
 def delete_category(id):
     with sqlite3.connect('./rare.db') as conn:
         db_cursor = conn.cursor()
@@ -53,3 +52,35 @@ def delete_category(id):
         DELETE FROM categories
         WHERE id = ?
         """, (id, ))
+
+def update_category(id, update_obj):
+    with sqlite3.connect('./rare.db') as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        UPDATE categories
+            Set
+                title = ?
+        WHERE id =?
+        """, (update_obj['title'], id ))
+
+        rows_affected = db_cursor.rowcount
+    if rows_affected == 0:
+        return False
+    else:
+        return True
+
+def create_category(new_obj):
+     with sqlite3.connect('./rare.db') as conn:
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        INSERT INTO categories
+            (title)
+        VALUES (?)
+        """, (new_obj['title'],  ))
+
+        id =  db_cursor.lastrowid
+
+        new_obj['id'] = id
+        return json.dumps(new_obj)
