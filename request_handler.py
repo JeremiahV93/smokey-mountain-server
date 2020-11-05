@@ -3,7 +3,7 @@ import json
 
 from users import get_single_user, create_user, delete_user, update_user
 from articles import get_single_article, create_article, delete_article, update_article
-from comments import get_all_comments_by_article, delete_comment
+from comments import get_all_comments_by_article, delete_comment, update_comment
 from tags import get_single_tag, update_tag, delete_tag, create_tag
 from categories import get_category_by_id, get_all_categories, delete_category, update_category, create_category
 
@@ -131,7 +131,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             success = update_article(id, post_body)
         elif resource == "tags":
             success = update_tag(id, post_body)
-        
+        elif resource == "comments":
+            success = update_comment(id, post_body)
         if success:
             self._set_headers(204)
         else:
