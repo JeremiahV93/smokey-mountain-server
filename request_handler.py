@@ -3,7 +3,7 @@ import json
 
 from users import get_single_user, create_user, delete_user, update_user
 from articles import get_single_article, create_article, delete_article, update_article
-from comments import get_all_comments_by_article
+from comments import get_all_comments_by_article, delete_comment
 from tags import get_single_tag, update_tag, delete_tag, create_tag
 from categories import get_category_by_id, get_all_categories, delete_category, update_category, create_category
 
@@ -113,7 +113,9 @@ class HandleRequests(BaseHTTPRequestHandler):
         elif resource == 'categories':
             delete_category(id)  
         elif resource == 'tags':
-            delete_tag(id)      
+            delete_tag(id)  
+        elif resource == 'comments':
+            delete_comment(id)    
         self.wfile.write("".encode())
 
     def do_PUT(self):
