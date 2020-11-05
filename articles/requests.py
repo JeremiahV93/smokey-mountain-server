@@ -1,5 +1,5 @@
 from models.article import Article
-
+from models.user import Usercomment
 import sqlite3
 import json
 
@@ -17,15 +17,19 @@ def get_single_article(id):
             a.content,
             a.date,
             a.user_id,
-            a.category_id
+            a.category_id,
+            u.display_name
         FROM articles a
+        JOIN users u
+            on u.id = a.user_id
         WHERE a.id = ?
         """, (id, ))
 
         data = db_cursor.fetchone()
 
         article = Article(data['id'],data['title'],data['content'], data['date'], data['user_id'], data['category_id'])
-
+        user = Usercomment(data['user_id'], data['display_name'])
+        article.user = user.__dict__
         return json.dumps(article.__dict__)
 
 def delete_article(id):

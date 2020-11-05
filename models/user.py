@@ -6,3 +6,8 @@ class User():
         self.email = email
         self.display_name = display_name
         self.date = date
+
+class Usercomment():
+    def __init__(self, id, display_name):
+        self.id = id
+        self.display_name = display_name

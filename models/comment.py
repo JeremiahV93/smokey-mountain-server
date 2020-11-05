@@ -6,3 +6,4 @@ class Comment():
         self.user_id = user_id
         self.date = date
         self.subject = subject
+        self.user = None
