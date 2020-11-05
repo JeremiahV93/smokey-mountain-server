@@ -1,4 +1,5 @@
 from models.comment import Comment
+from models.user import User, Usercomment
 
 import sqlite3
 import json
@@ -16,8 +17,11 @@ def get_all_comments_by_article(article_id):
             c.content,
             c.user_id,
             c.date,
-            c.subject
+            c.subject,
+            u.display_name
         FROM comments c
+        JOIN users u 
+            ON u.id = c.user_id
         WHERE c.article_id = ?
         """, (article_id, ))
 
@@ -26,7 +30,8 @@ def get_all_comments_by_article(article_id):
 
         for row in dataset:
             comment = Comment(row['id'], row['article_id'], row['content'], row['user_id'], row['date'], row['subject'])
-
+            user = Usercomment(row['user_id'], row['display_name'])
+            comment.user = user.__dict__
             comments.append(comment.__dict__)
 
         return json.dumps(comments)
