@@ -3,6 +3,7 @@ import json
 
 from users import get_single_user, create_user, delete_user, update_user
 from articles import get_single_article, create_article, delete_article, update_article
+from tags import get_single_tag, update_tag, delete_tag, create_tag
 from categories import get_category_by_id, get_all_categories, delete_category, update_category, create_category
 
 
@@ -62,7 +63,12 @@ class HandleRequests(BaseHTTPRequestHandler):
                 if id is not None:
                     response = f"{get_category_by_id(id)}" 
                 else:
-                    response = f"{get_all_categories()}"          
+                    response = f"{get_all_categories()}"     
+            elif resource == "tags":
+                if id is not None:
+                    response = f"{get_single_tag(id)}"
+                else:
+                    response = ""
 
         self.wfile.write(response.encode())
 
@@ -83,6 +89,10 @@ class HandleRequests(BaseHTTPRequestHandler):
             new_article = None
             new_article = create_article(post_body)
             self.wfile.write(f"{new_article}".encode())
+        elif resource == "tags":
+            new_tag = None
+            new_tag = create_tag(post_body)
+            self.wfile.write(f"{new_tag}".encode())
         elif resource == "categories":
             new_article = None
             new_article = create_category(post_body)
@@ -96,7 +106,9 @@ class HandleRequests(BaseHTTPRequestHandler):
         elif resource == 'articles':
                 delete_article(id)
         elif resource == 'categories':
-            delete_category(id)        
+            delete_category(id)  
+        elif resource == 'tags':
+            delete_tag(id)      
         self.wfile.write("".encode())
 
     def do_PUT(self):
@@ -110,8 +122,8 @@ class HandleRequests(BaseHTTPRequestHandler):
             success = update_user(id, post_body)
         elif resource == "articles":
             success = update_article(id, post_body)
-        elif resource == "categories":
-            success = update_category(id, post_body)
+        elif resource == "tags":
+            success = update_tag(id, post_body)
         
         if success:
             self._set_headers(204)
