@@ -35,3 +35,11 @@ def get_all_comments_by_article(article_id):
             comments.append(comment.__dict__)
 
         return json.dumps(comments)
+
+def delete_comment(id):
+    with sqlite3.connect("./rare.db") as conn:
+        db_cursor = conn.cursor()
+        db_cursor.execute("""
+        DELETE FROM comments
+        WHERE id = ?
+        """, (id, ))
