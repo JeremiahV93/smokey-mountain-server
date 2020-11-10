@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
-from users import get_single_user, create_user, delete_user, update_user
+from users import get_single_user, create_user, delete_user, update_user, check_user, auth_user
 from articles import get_single_article, create_article, delete_article, update_article
 from comments import get_all_comments_by_article, delete_comment, update_comment, create_comment
 from tags import get_single_tag, update_tag, delete_tag, create_tag
@@ -74,7 +74,10 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_tag(id)}"
                 else:
                     response = ""
-
+        elif len(parsed) == 3:
+            (resource, key, value) = parsed
+            if key == "email" and resource == "user":
+                response = auth_user(value)
         self.wfile.write(response.encode())
 
     def do_POST(self):
