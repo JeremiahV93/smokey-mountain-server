@@ -46,6 +46,31 @@ def check_user(email):
             return True
         else:
             return False
+
+def auth_user(email):
+    with sqlite3.connect("./rare.db") as conn:
+
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+            SELECT
+                u.email
+            FROM users u
+            WHERE u.email = ?
+            """, (email, ))
+
+        data = db_cursor.fetchone()
+        class Obj:
+            def __init__(self, success):
+                self.success = success
+
+        if data:
+            obj = Obj(True)
+            return json.dumps(obj.__dict__)
+        else:
+            obj = Obj(False)
+            return json.dumps(obj.__dict__)
         
 
 def create_user(new_user):
