@@ -2,7 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
 from users import get_single_user, create_user, delete_user, update_user, check_user, auth_user
-from articles import get_single_article, create_article, delete_article, update_article
+from articles import get_single_article, create_article, delete_article, update_article, get_all_articles
 from comments import get_all_comments_by_article, delete_comment, update_comment, create_comment
 from tags import get_single_tag, update_tag, delete_tag, create_tag
 from categories import get_category_by_id, get_all_categories, delete_category, update_category, create_category
@@ -58,7 +58,7 @@ class HandleRequests(BaseHTTPRequestHandler):
                 if id is not None:
                     response = f"{get_single_article(id)}" 
                 else:
-                    response = ""
+                    response = f"{get_all_articles()}"
             elif resource == "categories":
                 if id is not None:
                     response = f"{get_category_by_id(id)}" 

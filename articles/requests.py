@@ -4,6 +4,33 @@ import sqlite3
 import json
 
 
+def get_all_articles():
+    with sqlite3.connect("./rare.db") as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        SELECT
+            a.id,
+            a.title,
+            a.content,
+            a.date,
+            a.user_id,
+            a.category_id
+        FROM articles a
+        """)
+
+        articles = []
+
+        dataset = db_cursor.fetchall()
+
+        for row in dataset:
+
+            article = Article(row['id'], row['title'], row['content'], row['date'], row['user_id'], row['category_id'])
+
+            articles.append(article.__dict__)
+    return json.dumps(articles)
+    
 def get_single_article(id):
     with sqlite3.connect("./rare.db") as conn:
 
