@@ -55,22 +55,27 @@ def auth_user(email):
 
         db_cursor.execute("""
             SELECT
-                u.email
+                u.id,
+                u.first_name,
+                u.last_name,
+                u.email,
+                u.display_name,
+                u.date
             FROM users u
             WHERE u.email = ?
             """, (email, ))
 
         data = db_cursor.fetchone()
-        class Obj:
-            def __init__(self, success):
-                self.success = success
 
+        user = User(data['id'],data['first_name'],data['last_name'], data['email'], data['display_name'], data['date'])
+
+        
         if data:
-            obj = Obj(True)
-            return json.dumps(obj.__dict__)
+            user.success = True
+            return json.dumps(user.__dict__)
         else:
-            obj = Obj(False)
-            return json.dumps(obj.__dict__)
+            user.sucess = False
+            return json.dumps(user.__dict__)
         
 
 def create_user(new_user):
