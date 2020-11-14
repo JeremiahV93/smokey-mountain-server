@@ -1,11 +1,17 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
+<<<<<<< HEAD
 from users import get_single_user, create_user, delete_user, update_user
 from articles import get_single_article, create_article, delete_article, update_article
 from tags import get_single_tag, update_tag, delete_tag, create_tag, get_all_tags
+=======
+from users import get_single_user, create_user, delete_user, update_user, check_user, auth_user
+from articles import get_single_article, create_article, delete_article, update_article, get_all_articles, get_articles_by_categories
+from comments import get_all_comments_by_article, delete_comment, update_comment, create_comment
+from tags import get_single_tag, update_tag, delete_tag, create_tag
+>>>>>>> a1b24095c27fbbf626d49e8770b6c384d9e9d5c5
 from categories import get_category_by_id, get_all_categories, delete_category, update_category, create_category
-
 
 class HandleRequests(BaseHTTPRequestHandler):
     def parse_url(self, path):
@@ -58,18 +64,36 @@ class HandleRequests(BaseHTTPRequestHandler):
                 if id is not None:
                     response = f"{get_single_article(id)}" 
                 else:
+                    response = f"{get_all_articles()}"
+            elif resource == "article_category":
+                if id is not None:
+                    response = f"{get_articles_by_categories(id)}" 
+                else:
                     response = ""
             elif resource == "categories":
                 if id is not None:
                     response = f"{get_category_by_id(id)}" 
                 else:
-                    response = f"{get_all_categories()}"     
+                    response = f"{get_all_categories()}"   
+            elif resource == "comments":
+                if id is not None:
+                    response = f"{get_all_comments_by_article(id)}"
+                else:
+                    response = ""           
             elif resource == "tags":
                 if id is not None:
                     response = f"{get_single_tag(id)}"
                 else:
+<<<<<<< HEAD
                     response = f"{get_all_tags()}"
 
+=======
+                    response = ""
+        elif len(parsed) == 3:
+            (resource, key, value) = parsed
+            if key == "email" and resource == "user":
+                response = auth_user(value)
+>>>>>>> a1b24095c27fbbf626d49e8770b6c384d9e9d5c5
         self.wfile.write(response.encode())
 
     def do_POST(self):
@@ -96,7 +120,11 @@ class HandleRequests(BaseHTTPRequestHandler):
         elif resource == "categories":
             new_article = None
             new_article = create_category(post_body)
-            self.wfile.write(f"{new_article}".encode())    
+            self.wfile.write(f"{new_article}".encode())
+        elif resource == "comments":
+            new_comment = None
+            new_comment = create_comment(post_body)
+            self.wfile.write(f"{new_comment}".encode())   
 
     def do_DELETE(self):
         self._set_headers(204)
@@ -108,7 +136,9 @@ class HandleRequests(BaseHTTPRequestHandler):
         elif resource == 'categories':
             delete_category(id)  
         elif resource == 'tags':
-            delete_tag(id)      
+            delete_tag(id)  
+        elif resource == 'comments':
+            delete_comment(id)    
         self.wfile.write("".encode())
 
     def do_PUT(self):
@@ -122,14 +152,24 @@ class HandleRequests(BaseHTTPRequestHandler):
             success = update_user(id, post_body)
         elif resource == "articles":
             success = update_article(id, post_body)
+        elif resource == "categories":
+            success = update_category(id, post_body)
         elif resource == "tags":
             success = update_tag(id, post_body)
-        
+        elif resource == "comments":
+            success = update_comment(id, post_body)
         if success:
             self._set_headers(204)
         else:
             self._set_headers(404)
         self.wfile.write("".encode())        
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+        self.send_header('Access-Control-Allow-Headers', 'X-Requested-With')
+        self.end_headers()
 
 def main():
     host = ''

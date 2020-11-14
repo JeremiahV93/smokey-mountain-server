@@ -6,3 +6,4 @@ class Article():
         self.date = date
         self.user_id = user_id
         self.category_id = category_id
+        self.user = None
