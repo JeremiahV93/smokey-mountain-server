@@ -16,8 +16,11 @@ def get_all_articles():
             a.content,
             a.date,
             a.user_id,
-            a.category_id
+            a.category_id,
+            u.display_name
         FROM articles a
+        JOIN users u
+            on u.id = a.user_id
         """)
 
         articles = []
@@ -27,7 +30,8 @@ def get_all_articles():
         for row in dataset:
 
             article = Article(row['id'], row['title'], row['content'], row['date'], row['user_id'], row['category_id'])
-
+            user = Usercomment(row['user_id'], row['display_name'])
+            article.user = user.__dict__
             articles.append(article.__dict__)
     return json.dumps(articles)
     
