@@ -63,6 +63,39 @@ def get_single_article(id):
         article.user = user.__dict__
         return json.dumps(article.__dict__)
 
+def get_articles_by_categories(id):
+    with sqlite3.connect("./rare.db") as conn:
+
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        SELECT
+            a.id,
+            a.title,
+            a.content,
+            a.date,
+            a.user_id,
+            a.category_id,
+            u.display_name
+        FROM articles a
+        JOIN users u
+            on u.id = a.user_id
+        WHERE a.category_id = ?
+        """, (id, ))
+
+        articles = []
+
+        dataset = db_cursor.fetchall()
+
+        for row in dataset:
+            article = Article(row['id'],row['title'],row['content'], row['date'], row['user_id'], row['category_id'])
+            user = Usercomment(row['user_id'], row['display_name'])
+            article.user = user.__dict__
+            articles.append(article.__dict__)
+            
+        return json.dumps(articles)
+
 def delete_article(id):
     with sqlite3.connect("./rare.db") as conn:
         db_cursor = conn.cursor()
