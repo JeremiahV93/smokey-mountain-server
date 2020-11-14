@@ -3,6 +3,18 @@ from models.tag import Tag
 import sqlite3
 import json 
 
+def get_all_tags():
+    with sqlite3.connect('./rare/db') as conn:
+        conn.row_factory = sqlite3.Row
+        db_cursor = conn.cursor()
+
+        db_cursor.execute("""
+        SELECT
+            u.id,
+            u.title
+        FROM tags u
+        """)
+
 def get_single_tag(id):
     with sqlite3.connect("./rare.db") as conn:
 
