@@ -1,16 +1,9 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
-<<<<<<< HEAD
 from users import get_single_user, create_user, delete_user, update_user
 from articles import get_single_article, create_article, delete_article, update_article
 from tags import get_single_tag, update_tag, delete_tag, create_tag, get_all_tags
-=======
-from users import get_single_user, create_user, delete_user, update_user, check_user, auth_user
-from articles import get_single_article, create_article, delete_article, update_article, get_all_articles, get_articles_by_categories
-from comments import get_all_comments_by_article, delete_comment, update_comment, create_comment
-from tags import get_single_tag, update_tag, delete_tag, create_tag
->>>>>>> a1b24095c27fbbf626d49e8770b6c384d9e9d5c5
 from categories import get_category_by_id, get_all_categories, delete_category, update_category, create_category
 
 class HandleRequests(BaseHTTPRequestHandler):
@@ -84,16 +77,12 @@ class HandleRequests(BaseHTTPRequestHandler):
                 if id is not None:
                     response = f"{get_single_tag(id)}"
                 else:
-<<<<<<< HEAD
                     response = f"{get_all_tags()}"
-
-=======
-                    response = ""
         elif len(parsed) == 3:
             (resource, key, value) = parsed
             if key == "email" and resource == "user":
                 response = auth_user(value)
->>>>>>> a1b24095c27fbbf626d49e8770b6c384d9e9d5c5
+
         self.wfile.write(response.encode())
 
     def do_POST(self):
