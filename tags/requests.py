@@ -4,7 +4,7 @@ import sqlite3
 import json 
 
 def get_all_tags():
-    with sqlite3.connect('./rare/db') as conn:
+    with sqlite3.connect('./rare.db') as conn:
         conn.row_factory = sqlite3.Row
         db_cursor = conn.cursor()
 
@@ -14,6 +14,16 @@ def get_all_tags():
             u.title
         FROM tags u
         """)
+
+        tags = []
+        dataset = db_cursor.fetchall()
+
+        for row in dataset:
+            tag = Tag(row['id'], row['title'])
+
+            tags.append(tag.__dict__)
+
+    return json.dumps(tags)
 
 def get_single_tag(id):
     with sqlite3.connect("./rare.db") as conn:

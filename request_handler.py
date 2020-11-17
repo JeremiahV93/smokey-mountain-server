@@ -1,3 +1,6 @@
+from users.requests import auth_user
+from comments.requests import create_comment, delete_comment, get_all_comments_by_article, update_comment
+from articles.requests import get_all_articles, get_articles_by_categories
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
